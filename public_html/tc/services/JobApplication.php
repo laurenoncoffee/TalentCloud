@@ -63,6 +63,7 @@
             $jobPosterApplication = new JobPosterApplication();
             $jobPosterApplication->setApplication_job_poster_id($jsonJobPosterApplication["application_job_poster_id"]);
             $jobPosterApplication->setUser_id($user->getUser_id()); //The current user is always the application owner
+            $jobPosterApplication->setCitizenship_declaration_id($jsonJobPosterApplication['citizenship_declaration_id']);
             
             $questionAnswers = [];
             foreach ($jsonJobApplicationWithAnswers['application_question_answers'] as $jsonQA) {

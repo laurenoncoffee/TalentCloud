@@ -22,13 +22,14 @@ JobApplicationAPI.JobApplication = function (
         jobPosterId,
         userId,
         jobApplicationStatusId,
+        citizenshipDeclarationId,
         applicationQuestionAnswers) {
     this.job_poster_application = {};
     this.job_poster_application.job_poster_application_id = jobApplicationId;
     this.job_poster_application.application_job_poster_id = jobPosterId;
     this.job_poster_application.user_id = userId;
     this.job_poster_application.job_poster_application_status_id = jobApplicationStatusId;
-
+    this.job_poster_application.citizenship_declaration_id = citizenshipDeclarationId;
     this.application_question_answers = applicationQuestionAnswers;
 };
 
@@ -188,7 +189,23 @@ JobApplicationAPI.populateApplicationWithSavedApplicationContent = function (job
         SkillDeclarationAPI.loadSavedSkillDeclarationsForJobApplication(jobApplication.job_poster_application.job_poster_application_id);
         MicroReferenceAPI.loadSavedMicroReferencesForJobApplication(jobApplication.job_poster_application.job_poster_application_id);
         SkillSampleAPI.loadSavedSkillSamplesForJobApplication(jobApplication.job_poster_application.job_poster_application_id);
-
+        LookupAPI.getLookupResponse("citizenship_declaration", function (items) {
+            var applicantCitizenshipDeclaration = document.getElementById("applicant_citizenshipDeclaration");
+            Utilities.clearSelectOptions(applicantCitizenshipDeclaration);
+            for(var i=0;i<items.length;i++){
+                var option = document.createElement("option");
+                option.value = items[i].id;
+                option.innerHTML = items[i].value;
+                applicantCitizenshipDeclaration.appendChild(option);
+            }
+            
+            //Setting Citizenship Declaration with saved value
+            
+            if(jobPosterApplication.citizenship_declaration_id){
+                applicantCitizenshipDeclaration.value=jobPosterApplication.citizenship_declaration_id;
+            }
+        });
+        
         //Set saved question answer content
         var application_question_answers = jobApplication.application_question_answers;
         for (var i = 0; i < application_question_answers.length; i++) {
@@ -201,12 +218,26 @@ JobApplicationAPI.populateApplicationWithSavedApplicationContent = function (job
             }
         }
     } else if (jobApplicationRequestResponse.status === 404) {
+        
+        LookupAPI.getLookupResponse("citizenship_declaration", function (items) {
+            var applicantCitizenshipDeclaration = document.getElementById("applicant_citizenshipDeclaration");
+            Utilities.clearSelectOptions(applicantCitizenshipDeclaration);
+            for(var i=0;i<items.length;i++){
+                var option = document.createElement("option");
+                option.value = items[i].id;
+                option.innerHTML = items[i].value;
+                applicantCitizenshipDeclaration.appendChild(option);
+            }
+        });
+        
+        
         //An application for this job and user doesn't exist yet, so create a new draft application
 
         var status = 1; //draft status id
+        var citizenshipDeclarationId = 1; //draft citizenship declaration id
 
         var user = UserAPI.getSessionUserAsJSON();
-        var newApplication = new JobApplicationAPI.JobApplication(null, jobPosterId, user.user_id, status, []);
+        var newApplication = new JobApplicationAPI.JobApplication(null, jobPosterId, user.user_id, status, citizenshipDeclarationId, []);
         DataAPI.createJobApplication(newApplication, function (request) {
             if (request.status === 200) {
                 //Draft application was successfully created - save application id
@@ -282,21 +313,23 @@ JobApplicationAPI.saveJobApplication = function (onSuccess) {
                 null, questionId, question, answer);
         applicationQuestionAnswers.push(questionAnswer);
     }
-
+    //Citizenship Declaration
+    var citizenshipDeclaration = document.getElementById("applicant_citizenshipDeclaration").value;
+    
     var applicationStatus = 1; //draft status
     var userId = UserAPI.getSessionUserAsJSON().user_id;
-    var jobApplication = new JobApplicationAPI.JobApplication(jobApplicationId, jobPosterId, userId, applicationStatus, applicationQuestionAnswers);
-
+    var jobApplication = new JobApplicationAPI.JobApplication(jobApplicationId, jobPosterId, userId, applicationStatus, citizenshipDeclaration, applicationQuestionAnswers);
+    
     DataAPI.saveJobApplicationByJobAndUser(jobApplication, jobPosterId, userId, function (request) {
-        if (request.status === 200) {
-            if (onSuccess) {
-                onSuccess();
-            }
+    if (request.status === 200) {
+        if (onSuccess) {
+            onSuccess();
         } else {
             var message = JSON.parse(request.response).message;
             window.alert(message);
         }
-    });
+        }
+        });
 };
 
 JobApplicationAPI.showCreateJobConfirmation = function (jobTitle) {
@@ -322,6 +355,13 @@ JobApplicationAPI.showCreateJobConfirmation = function (jobTitle) {
 
     // Mobile Menu Overflow Release
     document.body.style.overflowY = "visible";
+    
+    //Turning off error messages from Citizenship Declaration
+    var citizenshipDeclarationIncomplete = document.getElementById("applicant_citizenshipDeclaration_incomplete_error_msg");
+    var citizenshipDeclarationEntitlement = document.getElementById("applicant_citizenshipDeclaration_entitlement_error_msg");
+    
+    citizenshipDeclarationIncomplete.classList.add("hidden");
+    citizenshipDeclarationEntitlement.classList.add("hidden");
 
 };
 
@@ -329,8 +369,35 @@ JobApplicationAPI.showPreviousApplicationSection = function (jobPosterId) {
     JobApplicationAPI.shiftApplicationSection(-1, jobPosterId);
 };
 
+JobApplicationAPI.validateMyInformation = function () {
+    //Citizen Declaration Error Messages
+    var citizenshipDeclarationIncomplete = document.getElementById("applicant_citizenshipDeclaration_incomplete_error_msg");
+    var citizenshipDeclarationEntitlement = document.getElementById("applicant_citizenshipDeclaration_entitlement_error_msg");
+    var citizenshipDeclaration = document.getElementById("applicant_citizenshipDeclaration");
+    
+    if (document.getElementById("applicant_citizenshipDeclaration").value == ""){
+        // If citizenship declaration was not selected, do nothing, show error message
+        citizenshipDeclarationIncomplete.classList.remove("hidden");
+        citizenshipDeclarationEntitlement.classList.add("hidden");
+        citizenshipDeclaration.focus();
+    }
+    else if(document.getElementById("applicant_citizenshipDeclaration").value == 5){
+        // If applicant is not enetitled to work in Canada, do nothing, show error message
+        citizenshipDeclarationEntitlement.classList.remove("hidden");
+        citizenshipDeclarationIncomplete.classList.add("hidden");
+        citizenshipDeclaration.focus();
+    }
+    else{
+        var jobPosterId = document.getElementById("jobApplicationJobPosterId").value;
+JobApplicationAPI.saveJobApplication(JobApplicationAPI.showNextApplicationSection(document.getElementById('jobApplicationJobPosterId').value));
+        citizenshipDeclarationIncomplete.classList.add("hidden");
+        citizenshipDeclarationEntitlement.classList.add("hidden");
+    }
+}
+
 JobApplicationAPI.showNextApplicationSection = function (jobPosterId) {
-    JobApplicationAPI.shiftApplicationSection(1, jobPosterId);
+
+        JobApplicationAPI.shiftApplicationSection(1, jobPosterId);
 };
 
 JobApplicationAPI.shiftApplicationSection = function (shift, jobPosterId) {
