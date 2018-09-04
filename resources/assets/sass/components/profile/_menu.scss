@@ -5,7 +5,7 @@
 // =============================================================================
 .applicant-profile__sticky-menu {
     background-color: $palette--white;
-    padding: calc(#{$unit} * 1.5);
+    padding: calc(#{$unit} * 2) calc(#{$unit} * 1.5);
     position: relative;
     z-index: 50;
 
