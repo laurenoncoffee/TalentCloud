@@ -9,10 +9,10 @@
         "jumbojett/openid-connect-php": "^0.4.1",
         "lcobucci/jwt": "3.2",
         "rcrowe/twigbridge": "^0.9.6",
-        "jenssegers/date": "3.3.1"
-    },
-    "require-dev": {
+        "jenssegers/date": "3.3.1",
         "barryvdh/laravel-debugbar": "3.1.5",
+    },
+    "require-dev": {        
         "friendsofphp/php-cs-fixer": "v2.10.4",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
