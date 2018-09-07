@@ -15,6 +15,7 @@ URL::forceScheme('https');
 
 Route::group(['domain' => config('app.applicant_domain'),
     'prefix' => config('app.applicant_prefix')], function() {
+
     /* Home */
     Route::get('/', 'HomepageController')->name('home');
 
