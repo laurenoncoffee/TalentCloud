@@ -13,8 +13,11 @@
 
 URL::forceScheme('https');
 
+
+
 /* Home */
-Route::get('/', 'HomepageController')->name('home');
+Route::redirect('/', '/en', 301);
+Route::get('/en', 'HomepageController')->name('home.en');
 
 /* Home FR */
 Route::get('/fr', 'HomepageControllerFR')->name('home.fr');
