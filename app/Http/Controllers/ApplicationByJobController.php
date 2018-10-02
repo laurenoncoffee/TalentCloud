@@ -81,109 +81,7 @@ class ApplicationByJobController extends Controller
             "veteran_options" => VeteranStatus::all(),
             "applicant" => $applicant,
             "form_submit_action" => route('job.application.update.1', $jobPoster),
-            "application" => [
-                "id" => "00",
-                "title" => "Apply Now",
-                "step" => "1",
-                "job_context_copy" => "You are applying for:",
-                "modals" => [
-                    "00" => [
-                        "type" => "login",
-                        "title" => "Register or Login with GC Account",
-                        "content" => [
-                            "00" => "Talent Cloud leverages a platform called GC Account that allows you to sign in to a variety of tools using the same account information.",
-                            "01" => "If you already have a GC Account, please use the Login link below to sign in. If you don't have an account, please use the Register link to create one."
-                        ],
-                        "id" => "login",
-                        "action_01" => "Register",
-                        "action_02" => "Login"
-                    ],
-                    "01" => [
-                        "type" => "logout",
-                        "title" => "Logout of Talent Cloud",
-                        "content" => [
-                            "00" => "Are you sure you want to logout of Talent Cloud?"
-                        ],
-                        "id" => "logout",
-                        "action_01" => "Cancel",
-                        "action_02" => "Logout"
-                    ],
-                    "02" => [
-                        "type" => "confirmation",
-                        "title" => "Delete this Diploma/Degree?",
-                        "content" => [
-                            "00" => "Are you sure you want to permanently delete this diploma or degree from your profile?",
-                            "01" => "All previously submitted applications will retain this experience."
-                        ],
-                        "id" => "deleteDegree",
-                        "action_01" => "Cancel",
-                        "action_02" => "Delete"
-                    ],
-                    "03" => [
-                        "type" => "confirmation",
-                        "title" => "Delete this Course/Certification?",
-                        "content" => [
-                            "00" => "Are you sure you want to permanently delete this course or certification from your profile?",
-                            "01" => "All previously submitted applications will retain this experience."
-                        ],
-                        "id" => "deleteCourse",
-                        "action_01" => "Cancel",
-                        "action_02" => "Delete"
-                    ],
-                    "04" => [
-                        "type" => "confirmation",
-                        "title" => "Delete this Lived Experience?",
-                        "content" => [
-                            "00" => "Are you sure you want to permanently delete this lived experience from your profile?",
-                            "01" => "All previously submitted applications will retain this experience."
-                        ],
-                        "id" => "deleteWork",
-                        "action_01" => "Cancel",
-                        "action_02" => "Delete"
-                    ]
-                ],
-                "question_label" => "Your Answer",
-                "question_title" => "My Fit",
-                "save_quit_button_label" => "Save & Quit",
-                "save_continue_button_label" => "Save & Continue",
-                "claim_title" => "Basic Information",
-                "language_title" => "Language Selection",
-                "language_copy" => "Which language would you prefer for this application process?",
-                "language_label" => "Select One",
-                "language_options" => [
-                    "00" => "English",
-                    "01" => "French"
-                ],
-                "citizenship_title" => "Citizenship Claim",
-                "citizenship_content" => "Which of the following applies to you?",
-                "citizenship_label" => "Select One",
-                "citizenship_options" => [
-                    "00" => "Canadian Citizen",
-                    "01" => "Permanent Resident of Canada",
-                    "02" => "Open - Work Permit",
-                    "03" => "Closed - Work Permit",
-                    "04" => "I am currently not entitled to work in Canada"
-                ],
-                "veterans_title" => "Veterans Claim",
-                "veterans_content" => "Are you a veteran or a member of the Canadian Armed Forces?",
-                "veterans_label" => "Select One",
-                "veterans_options" => [
-                    "00" => "No - I am not a veteran or a member of the Canadian Armed Forces.",
-                    "01" => "Yes - I am currently a member of the Canadian Armed Forces.",
-                    "02" => "Yes - I am a veteran."
-                ],
-                "experience_section" => [
-                    "section_degree_title" => "My Diplomas/Degrees",
-                    "add_degree_label" => "Add Diploma/Degree",
-                    "null_degree_copy" => "You don't currently have any diplomas or degrees on your profile! Use the button above to add one.",
-                    "section_course_title" => "My Courses/Certifications",
-                    "add_course_label" => "Add Course/Certification",
-                    "null_course_copy" => "You don't currently have any courses or certifications on your profile! Use the button above to add one.",
-                    "section_work_title" => "My Lived Experience",
-                    "add_work_label" => "Add Lived Experience",
-                    "null_work_copy" => "You don't currently have any lived experience on your profile! Use the button above to add some.",
-                ]
-            ],
+            "application" => Lang::get('applicant/application_basics'),
             "job_application" => $application,
             "user" => [
                 "name" => "Jason Greene",
@@ -298,69 +196,6 @@ class ApplicationByJobController extends Controller
                 ]
             ],
             "job" => $jobPoster,
-            // "job" => [
-            //     "link" => "/browse/jobs/00/",
-            //     "title" => "Front-end Developer",
-            //     "department" => "Treasury Board of Canada Secretariat",
-            //     "city" => "Ottawa",
-            //     "province" => "Ontario",
-            //     "salary" => "80,000 - 120,000",
-            //     "duration" => "1 Year",
-            //     "remote" => "Allowed",
-            //     "telework" => "Allowed",
-            //     "time_flexibility" => "Allowed",
-            //     "days_remaining" => "12",
-            //     "applicants" => "2",
-            //     "reference_id" => "14234",
-            //     "start" => "January 3rd, 2019",
-            //     "language" => "English Essential",
-            //     "security" => "Top Secret",
-            //     "classification" => "CS3",
-            //     "impact" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porttitor magna et ante ornare faucibus. Quisque ligula enim, finibus vel velit quis, aliquam cursus nunc. Fusce quis urna ut dolor pharetra bibendum. Aliquam erat volutpat. Sed quis laoreet tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer fringilla at ligula id porttitor. Nullam ac viverra velit, et rhoncus tellus. Praesent in lacus magna. Duis ut vulputate ipsum. In ut ornare elit. Donec id massa felis. Nam at ullamcorper risus. Vestibulum vitae aliquet ex, et ornare libero. Pellentesque sit amet vehicula neque. Donec auctor a erat posuere vehicula.",
-            //     "work" => [
-            //         "00" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porttitor magna et ante ornare faucibus. Quisque ligula enim, finibus vel velit quis, aliquam cursus nunc. Fusce quis urna ut dolor pharetra bibendum. Aliquam erat volutpat.",
-            //         "01" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porttitor magna et ante ornare faucibus. Quisque ligula enim, finibus vel velit quis, aliquam cursus nunc. Fusce quis urna ut dolor pharetra bibendum. Aliquam erat volutpat.",
-            //         "02" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porttitor magna et ante ornare faucibus. Quisque ligula enim, finibus vel velit quis, aliquam cursus nunc. Fusce quis urna ut dolor pharetra bibendum. Aliquam erat volutpat."
-            //     ],
-            //     "criteria" => [
-            //         "essential" => [
-            //             "00" => "Criteria 01",
-            //             "01" => "Criteria 02",
-            //             "02" => "Criteria 03"
-            //         ],
-            //         "asset" => [
-            //             "00" => "Criteria 01",
-            //             "01" => "Criteria 02",
-            //             "02" => "Criteria 03"
-            //         ]
-            //     ],
-            //     "extras" => [
-            //         "00" => [
-            //             "title" => "What You Need for Security Clearance",
-            //             "copy" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus, purus a congue bibendum, nibh quam convallis leo, a pharetra dui ante nec magna. Proin elementum lacus venenatis nulla luctus, sed porttitor quam ullamcorper. Proin in facilisis sapien, in ullamcorper orci."
-            //         ],
-            //         "01" => [
-            //             "title" => "The Application Process",
-            //             "copy" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus, purus a congue bibendum, nibh quam convallis leo, a pharetra dui ante nec magna. Proin elementum lacus venenatis nulla luctus, sed porttitor quam ullamcorper. Proin in facilisis sapien, in ullamcorper orci."
-            //         ],
-            //         "02" => [
-            //             "title" => "Other Paperwork & Preparation",
-            //             "copy" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dapibus, purus a congue bibendum, nibh quam convallis leo, a pharetra dui ante nec magna. Proin elementum lacus venenatis nulla luctus, sed porttitor quam ullamcorper. Proin in facilisis sapien, in ullamcorper orci."
-            //         ]
-            //     ],
-            //     "questions" => [
-            //         "00" => [
-            //             "value" => "Why are you interested in this job?",
-            //             "id" => "00",
-            //             "description" => "We want to know why you are interested in this job instead of other similar ones. This information will be used to help inform a decision to choose between fully qualified candidates at the end of the selection process."
-            //         ],
-            //         "01" => [
-            //             "value" => "Why are you the right person for this job?",
-            //             "id" => "01",
-            //             "description" => "Tell us what makes you unique. Why should you stand out from other candidates. This information will be used to help inform a decision to choose between fully qualified candidates at the end of the selection process."
-            //         ]
-            //     ]
-            // ]
         ]);
     }
 
@@ -1231,6 +1066,15 @@ class ApplicationByJobController extends Controller
         $applicant = Auth::user()->applicant;
         $application = $this->getApplicationFromJob($jobPoster);
 
+        $criteria = [
+            'essential' => $jobPoster->criteria->filter(function($value, $key) {
+                return $value->criteria_type->name == 'essential';
+            }),
+            'asset' => $jobPoster->criteria->filter(function($value, $key) {
+                return $value->criteria_type->name == 'asset';
+            }),
+        ];
+
         return view('applicant/application_post_05', [
             "applicant" => $applicant,
             "form_submit_action" => route('job.application.submit', $jobPoster),
@@ -1377,6 +1221,7 @@ class ApplicationByJobController extends Controller
                     ]
                 ]
             ],
+            "criteria" => $criteria,
             "job_application" => $application,
             "job" => $jobPoster,
             // "job" => [

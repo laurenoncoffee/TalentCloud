@@ -16,6 +16,7 @@ namespace App\Models;
  *
  * @property \App\Models\Lookup\SkillType $skill_type
  * @property \Illuminate\Database\Eloquent\Collection $skill_declarations
+ * @property \Illuminate\Database\Eloquent\Collection $criteria
  */
 class Skill extends BaseModel {
 
@@ -34,6 +35,10 @@ class Skill extends BaseModel {
 
     public function skill_declarations() {
         return $this->hasMany(\App\Models\SkillDeclaration::class);
+    }
+
+    public function criteria() {
+        return $this->hasMany(\App\Models\Criteria::class);
     }
 
 }
